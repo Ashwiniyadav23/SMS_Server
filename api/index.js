@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const app = require("../app");
 
 let connectionPromise;
+let app;
 
 async function connectToDatabase() {
   if (mongoose.connection.readyState === 1) return;
@@ -18,6 +18,10 @@ async function connectToDatabase() {
 
 module.exports = async function handler(req, res) {
   try {
+    app ||= require("../app");
+    if (req.method === "GET" && req.url === "/") {
+      return res.status(200).json({ message: "Student API is running!" });
+    }
     await connectToDatabase();
     return app(req, res);
   } catch (error) {

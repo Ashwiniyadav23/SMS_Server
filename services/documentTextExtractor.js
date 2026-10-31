@@ -1,11 +1,10 @@
-const { PDFParse } = require("pdf-parse");
-
 async function extractDocumentText(file) {
   const filename = file.originalname.toLowerCase();
   if (filename.endsWith(".txt") || file.mimetype === "text/plain") {
     return file.buffer.toString("utf8");
   }
   if (filename.endsWith(".pdf") || file.mimetype === "application/pdf") {
+    const { PDFParse } = require("pdf-parse");
     const parser = new PDFParse({ data: file.buffer });
     try {
       const parsed = await parser.getText();
